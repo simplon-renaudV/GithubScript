@@ -1,0 +1,22 @@
+#!/bin/bash
+if [ $# -ne 2 ]
+then
+	echo "2 paramètres sont nécessaires, le premier est le chemin, et le second le nom du projet"
+else
+	cd $1 #chemin
+	mkdir $2 #nom du projet
+	cd $2
+	touch readme.md
+
+	datecreation=$(date +"%x")
+	echo "### Projet : "$2 >> readme.md
+	echo "#### Auteur : Renaud Vivancos" >> readme.md
+	echo "créé le "$datecreation >> readme.md
+
+	git init
+	curl -H 'Authorization: token cedef73b40ae0740ec67574d3bceed4ed014f435' https://api.github.com/user/repos -d '{"name": "'$2'"}'
+	git add *
+	git commit -am "premier commit vide"
+	git remote add origin git@github.com:simplon-renaudV/$2.git
+	git push -u origin master
+fi
